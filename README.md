@@ -16,6 +16,7 @@ DotKernel log component extending and customizing
 [![SymfonyInsight](https://insight.symfony.com/projects/287e81e8-b4fb-4452-bd8f-4f12c0ab1f76/big.svg)](https://insight.symfony.com/projects/287e81e8-b4fb-4452-bd8f-4f12c0ab1f76)
 
 ## Adding The Config Provider
+
 * Enter config/config.php
 * If there is no entry for the config provider below, add it:
 `\Dot\Log\ConfigProvider::class`
@@ -23,7 +24,7 @@ DotKernel log component extending and customizing
 * Open the `Dot\Log\ConfigProvider`
 * In the dependencies section you will see an absctract factory (LoggerAbstractServiceFactory::class)
 * This class responds to "selectors" instead of class names
-  - Instead of requesting the `Laminas\Log\Logger::class`from the container, dot-log.my_logger should be requested (or just `my_logger` if using laminas-log)
+  Instead of requesting the `Laminas\Log\Logger::class`from the container, dot-log.my_logger should be requested (or just `my_logger` if using laminas-log)
 
 ## Configuring the writer(s)
 
@@ -73,9 +74,11 @@ The writer priority key is optional.
 To write into a file the key stream must be present in the writer options array. This is required only if writing into streams/files.
 
 ## Grouping log files by date
+
 By default, logs will be written to the same file: `log/dk.log`.
 Optionally, you can use date format specifiers wrapped between curly braces in your FileWriter's `stream` option, automatically grouping your logs by day, week, month, year etc.
 Examples:
+
 * `log/dk-{Y}-{m}-{d}.log` will write every day to a different file (eg: log/dk-2021-01-01.log)
 * `log/dk-{Y}-{W}.log` will write every week to a different file (eg: log/dk-2021-10.log)
 
