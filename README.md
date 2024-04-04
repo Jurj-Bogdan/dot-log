@@ -15,8 +15,8 @@ DotKernel log component extending and customizing
 
 [![SymfonyInsight](https://insight.symfony.com/projects/287e81e8-b4fb-4452-bd8f-4f12c0ab1f76/big.svg)](https://insight.symfony.com/projects/287e81e8-b4fb-4452-bd8f-4f12c0ab1f76)
 
-
 ## Adding The Config Provider
+
 * Enter config/config.php
 * If there is no entry for the config provider below, add it:
 `\Dot\Log\ConfigProvider::class`
@@ -24,19 +24,21 @@ DotKernel log component extending and customizing
 * Open the `Dot\Log\ConfigProvider`
 * In the dependencies section you will see an absctract factory (LoggerAbstractServiceFactory::class)
 * This class responds to "selectors" instead of class names
-  - Instead of requesting the `Laminas\Log\Logger::class`from the container, dot-log.my_logger should be requested (or just `my_logger` if using laminas-log)
+  Instead of requesting the `Laminas\Log\Logger::class`from the container, dot-log.my_logger should be requested (or just `my_logger` if using laminas-log)
 
 ## Configuring the writer(s)
+
 Loggers must have at least one writer.
 
 A writer is an object that inherits from `Laminas\Log\Writer\AbstractWriter`. A writer's responsibility is to record log data to a storage backend. (from laminas-log's writer documentation)
 
-
 ### Writing to a file (stream)
+
 It is possible separate logs into multiple files using writers and filters.
 For example *warnings.log*, *errors.log*, *all_messages.log*.
 
 The following is the simplest example to write all log messages to `/log/dk.log`
+
 ```php
 return [
     'dot_log' => [
@@ -56,9 +58,9 @@ return [
     ],
 ];
 ```
+
 * The `FileWriter` key is optional, otherwise the writers array would be enumerative instead of associative.
 * The writer name key is a developer-provided name for that writer, the writer name key is **mandatory**.
-
 
 The writer priority key is not affecting the errors that are written, it is a way to organize writers, for example:
 
@@ -71,16 +73,16 @@ The writer priority key is optional.
 
 To write into a file the key stream must be present in the writer options array. This is required only if writing into streams/files.
 
-
 ## Grouping log files by date
+
 By default, logs will be written to the same file: `log/dk.log`.
 Optionally, you can use date format specifiers wrapped between curly braces in your FileWriter's `stream` option, automatically grouping your logs by day, week, month, year etc.
 Examples:
+
 * `log/dk-{Y}-{m}-{d}.log` will write every day to a different file (eg: log/dk-2021-01-01.log)
 * `log/dk-{Y}-{W}.log` will write every week to a different file (eg: log/dk-2021-10.log)
 
 The full list of format specifiers is available [here](https://www.php.net/manual/en/datetime.format.php).
-
 
 ## Filtering log messages
 
@@ -90,8 +92,8 @@ The log levels are: emergency (0), alert (1), critical (2), error (3), warn (4),
 
 Although the plain Logger in Laminas Log is not fully compatible with PSR-3, it provides a way to log all of these message types.
 
-
 The following example has three file writers using filters:
+
 * First Example: `FileWriter` - All messages are logged in `/log/dk.log`
 * Second Example: `OnlyWarningsWriter` - Only warnings are logged in `/log/warnings.log`
 * Third Example: `WarningOrHigherWriter` - All important messages (`warnings` or more critical) are logged in `/log/important_messages.log`
@@ -171,8 +173,6 @@ The filter added on the first writer is equal to not setting a filter, but it wa
 
 It was added opposite to the others just to demonstrate the other operator is also an option.
 
-
-
 More examples on filters: https://docs.laminas.dev/laminas-log/filters/
 
 ## Formatting Messages
@@ -183,20 +183,16 @@ For a better readability, these arrays can be serialized.
 
 Laminas Log provides String formatting, XML, JSON and FirePHP formatting.
 
-
-
 The formatter accepts following parameters:
 
 name - the formatter class (it must implement Laminas\Log\Formatter\FormatterInterface)
 options - options to pass to the formatter constructor if required
-
 
 The following formats the message as JSON data:
 
 'formatter' => [
     'name' => \Laminas\Log\Formatter\Json::class,
 ],
-
 
 ### Example with formatter
 
@@ -243,13 +239,17 @@ return [
 ```
 
 ## Usage
+
 Basic usage of the logger is illustraded below.
 
 The messages are written to see which logs are written and which are not written.
+
 ```php
 use Laminas\Log\Logger;
 ```
+
 ...
+
 ```php
 $logger = $container->get('dot-log.my_logger');
 
@@ -266,9 +266,9 @@ $logger->log(Logger::NOTICE, 'NOTICE from log()');
 ```
 
 Sources:
+
 * https://docs.laminas.dev/laminas-log/
 * https://docs.laminas.dev/laminas-log/writers/
 * https://docs.laminas.dev/laminas-log/filters/
 
 Extracted from [this article](https://www.dotkernel.com/dotkernel/logging-with-dot-log-in-mezzio-and-dotkernel)
-
