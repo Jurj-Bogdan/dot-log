@@ -1,11 +1,10 @@
-## Filtering log messages
+# Filtering log messages
 
 As per PSR-3 document.
 
 The log levels are: emergency (0), alert (1), critical (2), error (3), warn (4), notice (5), info (6), debug (7) (in order of priority/importance)
 
 Although the plain Logger in Laminas Log is not fully compatible with PSR-3, it provides a way to log all of these message types.
-
 
 The following example has three file writers using filters:
 * First Example: `FileWriter` - All messages are logged in `/log/dk.log`
@@ -86,7 +85,5 @@ IMPORTANT NOTE: the operator for more important messages is <=, this is because 
 The filter added on the first writer is equal to not setting a filter, but it was been added to illustrate how to explicitly allow all messages.
 
 It was added opposite to the others just to demonstrate the other operator is also an option.
-
-
 
 More examples on filters: https://docs.laminas.dev/laminas-log/filters/

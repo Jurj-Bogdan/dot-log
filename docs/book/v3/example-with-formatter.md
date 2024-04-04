@@ -1,4 +1,4 @@
-### Example with formatter
+# Example with formatter
 
 * The log is used through dot-log
 * The logger name is my_logger
@@ -8,8 +8,6 @@
 
 ```php
 <?php
-
-
 return [
     'dot_log' => [
         'loggers' => [
@@ -50,6 +48,7 @@ The messages are written to see which logs are written and which are not written
 use Laminas\Log\Logger;
 ```
 ...
+
 ```php
 $logger = $container->get('dot-log.my_logger');
 

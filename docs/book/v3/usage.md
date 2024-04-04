@@ -1,4 +1,5 @@
-## Usage
+# Usage
+
 Basic usage of the logger is illustraded below.
 
 The messages are written to see which logs are written and which are not written.
@@ -6,6 +7,7 @@ The messages are written to see which logs are written and which are not written
 use Laminas\Log\Logger;
 ```
 ...
+
 ```php
 $logger = $container->get('dot-log.my_logger');
 
