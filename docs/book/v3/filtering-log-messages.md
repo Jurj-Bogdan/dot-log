@@ -7,6 +7,7 @@ The log levels are: emergency (0), alert (1), critical (2), error (3), warn (4),
 Although the plain Logger in Laminas Log is not fully compatible with PSR-3, it provides a way to log all of these message types.
 
 The following example has three file writers using filters:
+
 * First Example: `FileWriter` - All messages are logged in `/log/dk.log`
 * Second Example: `OnlyWarningsWriter` - Only warnings are logged in `/log/warnings.log`
 * Third Example: `WarningOrHigherWriter` - All important messages (`warnings` or more critical) are logged in `/log/important_messages.log`
