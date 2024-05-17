@@ -6,8 +6,7 @@ A writer is an object that inherits from `Laminas\Log\Writer\AbstractWriter`. A 
 
 ## Writing to a file (stream)
 
-It is possible separate logs into multiple files using writers and filters.
-For example *warnings.log*, *errors.log*, *all_messages.log*.
+You can separate logs into multiple files using writers and filters. For example *warnings.log*, *errors.log*, *all_messages.log*.
 
 The following is the simplest example to write all log messages to `/log/dk.log`
 
@@ -32,15 +31,16 @@ return [
 ```
 
 * The `FileWriter` key is optional, otherwise the writers array would be enumerative instead of associative.
-* The writer name key is a developer-provided name for that writer, the writer name key is **mandatory**.
+* The `name` key is a developer-provided name for that writer, the writer name key is **mandatory**.
 
-The writer priority key is not affecting the errors that are written, it is a way to organize writers, for example:
+The `priority` key does not affect the errors that are written. It is a way to organize writers, for example:
 
-1 - FILE
-2 - SQL
-3 - E-mail
-It is the most important to write in the file, the sql or e-mail are more probably fail because the servers can be external and offline, the file is on the same server.
+* 1 - FILE
+* 2 - SQL
+* 3 - E-mail
 
-The writer priority key is optional.
+The most important things to write in the file, the sql or e-mail are usually fails because the servers can be external and offline, but the file is on the same server.
 
-To write into a file the key stream must be present in the writer options array. This is required only if writing into streams/files.
+The `priority` key is optional.
+
+The key `stream` is required only if writing into streams/files.
