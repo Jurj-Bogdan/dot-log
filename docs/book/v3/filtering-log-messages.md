@@ -2,7 +2,7 @@
 
 The following conforms to the `PSR-3: Logger Interface` document.
 
-The log levels are in order of priority/importance: 
+The log levels are in order of priority/importance:
 
 * emergency (0)
 * alert (1)
