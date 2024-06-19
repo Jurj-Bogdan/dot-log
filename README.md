@@ -1,6 +1,11 @@
 # dot-log
 
-DotKernel log component extending and customizing
+> [!IMPORTANT]
+> dot-log is a wrapper on top of [laminas-log](https://github.com/laminas/laminas-log)
+>
+> ![OSS Lifecycle](https://img.shields.io/osslifecycle/laminas/laminas-log)
+
+## dot-log badges
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-log)
 ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-log/3.4.4)
@@ -20,11 +25,11 @@ DotKernel log component extending and customizing
 * Enter config/config.php
 * If there is no entry for the config provider below, add it:
 `\Dot\Log\ConfigProvider::class`
-* Make sure it is added before with the Application-Specific components, eg.: \Frontend\App\ConfigProvider.php, `\Admin\App\ConfigProvider::class`, `MyProject\ConfigProvider::class` , etc.
+* Make sure it is added before with the Application-Specific components, eg.: `\Frontend\App\ConfigProvider.php`, `\Admin\App\ConfigProvider::class`, `MyProject\ConfigProvider::class` , etc.
 * Open the `Dot\Log\ConfigProvider`
-* In the dependencies section you will see an absctract factory (LoggerAbstractServiceFactory::class)
+* In the dependencies section you will see an abstract factory (`LoggerAbstractServiceFactory::class`)
 * This class responds to "selectors" instead of class names
-  Instead of requesting the `Laminas\Log\Logger::class`from the container, dot-log.my_logger should be requested (or just `my_logger` if using laminas-log)
+  Instead of requesting the `Laminas\Log\Logger::class` from the container, `dot-log.my_logger` should be requested (or just `my_logger` if using `laminas-log`)
 
 ## Configuring the writer(s)
 
@@ -79,8 +84,8 @@ By default, logs will be written to the same file: `log/dk.log`.
 Optionally, you can use date format specifiers wrapped between curly braces in your FileWriter's `stream` option, automatically grouping your logs by day, week, month, year etc.
 Examples:
 
-* `log/dk-{Y}-{m}-{d}.log` will write every day to a different file (eg: log/dk-2021-01-01.log)
-* `log/dk-{Y}-{W}.log` will write every week to a different file (eg: log/dk-2021-10.log)
+* `log/dk-{Y}-{m}-{d}.log` will write every day to a different file (eg: `log/dk-2021-01-01.log`)
+* `log/dk-{Y}-{W}.log` will write every week to a different file (eg: `log/dk-2021-10.log`)
 
 The full list of format specifiers is available [here](https://www.php.net/manual/en/datetime.format.php).
 
@@ -185,14 +190,16 @@ Laminas Log provides String formatting, XML, JSON and FirePHP formatting.
 
 The formatter accepts following parameters:
 
-name - the formatter class (it must implement Laminas\Log\Formatter\FormatterInterface)
+name - the formatter class (it must implement `Laminas\Log\Formatter\FormatterInterface`)
 options - options to pass to the formatter constructor if required
 
 The following formats the message as JSON data:
 
+```php
 'formatter' => [
     'name' => \Laminas\Log\Formatter\Json::class,
 ],
+```
 
 ### Example with formatter
 
@@ -240,7 +247,7 @@ return [
 
 ## Usage
 
-Basic usage of the logger is illustraded below.
+Basic usage of the logger is illustrated below.
 
 The messages are written to see which logs are written and which are not written.
 
