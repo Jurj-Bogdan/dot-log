@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dot\Log\Factory;
 
 use Exception;
-use Laminas\Log\ProcessorPluginManager;
+use Dot\Log\Manager\ProcessorPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

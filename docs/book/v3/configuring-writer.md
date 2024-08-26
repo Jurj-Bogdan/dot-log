@@ -18,7 +18,7 @@ return [
                 'writers' => [
                      'FileWriter' => [
                         'name' => 'FileWriter',
-                        'priority' => \Laminas\Log\Logger::ALERT, // this is equal to 1
+                        'priority' => \Dot\Log\Manager\Logger::ALERT, // this is equal to 1
                         'options' => [
                             'stream' => __DIR__ . '/../../log/dk.log',
                         ],
