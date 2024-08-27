@@ -231,6 +231,8 @@ class Logger implements LoggerInterface
 
     /**
      * Get writer instance
+     *
+     * @psalm-suppress InvalidReturnStatement
      */
     public function writerPlugin(string $name, ?array $options = null): WriterInterface
     {
@@ -299,6 +301,9 @@ class Logger implements LoggerInterface
         return $this;
     }
 
+    /**
+     * @psalm-suppress InvalidReturnStatement
+     */
     public function processorPlugin(string $name, ?array $options = null): ProcessorInterface
     {
         return $this->getProcessorPluginManager()->get($name, $options);
