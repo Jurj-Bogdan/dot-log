@@ -24,8 +24,10 @@ class Json implements FormatterInterface
 
     /**
      * Formats data into a single line to be written by the writer.
+     *
+     * @psalm-suppress InvalidArrayAccess
      */
-    public function format($event): string
+    public function format(iterable $event): string
     {
         if (isset($event['timestamp']) && $event['timestamp'] instanceof DateTime) {
             $event['timestamp'] = $event['timestamp']->format($this->getDateTimeFormat());

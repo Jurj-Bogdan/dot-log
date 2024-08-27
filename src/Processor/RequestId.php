@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dot\Log\Processor;
 
+use function md5;
+
 class RequestId implements ProcessorInterface
 {
     protected string $identifier;
@@ -49,4 +51,3 @@ class RequestId implements ProcessorInterface
         return $this->identifier;
     }
 }
-

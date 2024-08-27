@@ -19,6 +19,39 @@ use Laminas\Stdlib\ArrayUtils;
 use Laminas\Stdlib\SplPriorityQueue;
 use Traversable;
 
+use function array_reverse;
+use function count;
+use function error_get_last;
+use function error_reporting;
+use function in_array;
+use function is_array;
+use function is_object;
+use function is_string;
+use function method_exists;
+use function register_shutdown_function;
+use function restore_error_handler;
+use function restore_exception_handler;
+use function set_error_handler;
+use function set_exception_handler;
+use function sprintf;
+use function var_export;
+
+use const E_COMPILE_ERROR;
+use const E_COMPILE_WARNING;
+use const E_CORE_ERROR;
+use const E_CORE_WARNING;
+use const E_DEPRECATED;
+use const E_ERROR;
+use const E_NOTICE;
+use const E_PARSE;
+use const E_RECOVERABLE_ERROR;
+use const E_STRICT;
+use const E_USER_DEPRECATED;
+use const E_USER_ERROR;
+use const E_USER_NOTICE;
+use const E_USER_WARNING;
+use const E_WARNING;
+
 class Logger implements LoggerInterface
 {
     /**
@@ -89,9 +122,9 @@ class Logger implements LoggerInterface
 
     protected SplPriorityQueue $processors;
 
-    protected WriterPluginManager $writerPlugins;
+    protected ?WriterPluginManager $writerPlugins;
 
-    protected ProcessorPluginManager $processorPlugins;
+    protected ?ProcessorPluginManager $processorPlugins;
 
     /**
      * Constructor
@@ -101,7 +134,7 @@ class Logger implements LoggerInterface
      * - exceptionhandler: if true register this logger as exceptionhandler
      * - errorhandler: if true register this logger as errorhandler
      */
-    public function __construct(iterable $options = null)
+    public function __construct(?iterable $options = null)
     {
         $this->writers    = new SplPriorityQueue();
         $this->processors = new SplPriorityQueue();
@@ -112,12 +145,6 @@ class Logger implements LoggerInterface
 
         if (! $options) {
             return;
-        }
-
-        if (! is_array($options)) {
-            throw new InvalidArgumentException(
-                'Options must be an array or an object implementing \Traversable '
-            );
         }
 
         // Inject writer plugin manager, if available
@@ -188,7 +215,7 @@ class Logger implements LoggerInterface
         }
     }
 
-    public function getWriterPluginManager(): WriterPluginManager
+    public function getWriterPluginManager(): ?WriterPluginManager
     {
         if (null === $this->writerPlugins) {
             $this->setWriterPluginManager(new WriterPluginManager(new ServiceManager()));
@@ -221,7 +248,7 @@ class Logger implements LoggerInterface
             throw new InvalidArgumentException(sprintf(
                 'Writer must implement %s\Writer\WriterInterface; received "%s"',
                 __NAMESPACE__,
-                is_object($writer) ? get_class($writer) : gettype($writer)
+                $writer::class
             ));
         }
         $this->writers->insert($writer, $priority);
@@ -247,7 +274,7 @@ class Logger implements LoggerInterface
         return $this;
     }
 
-    public function getProcessorPluginManager(): ProcessorPluginManager
+    public function getProcessorPluginManager(): ?ProcessorPluginManager
     {
         if (null === $this->processorPlugins) {
             $this->setProcessorPluginManager(new ProcessorPluginManager(new ServiceManager()));
@@ -255,7 +282,7 @@ class Logger implements LoggerInterface
         return $this->processorPlugins;
     }
 
-    public function setProcessorPluginManager($plugins): static
+    public function setProcessorPluginManager(string|ProcessorPluginManager $plugins): static
     {
         if (is_string($plugins)) {
             $plugins = new $plugins();
@@ -264,7 +291,7 @@ class Logger implements LoggerInterface
             throw new InvalidArgumentException(sprintf(
                 'processor plugin manager must extend %s\ProcessorPluginManager; received %s',
                 __NAMESPACE__,
-                is_object($plugins) ? get_class($plugins) : gettype($plugins)
+                $plugins::class
             ));
         }
 
@@ -277,14 +304,17 @@ class Logger implements LoggerInterface
         return $this->getProcessorPluginManager()->get($name, $options);
     }
 
-    public function addProcessor(ProcessorInterface|string $processor, int $priority = 1, ?array $options = null): static
-    {
+    public function addProcessor(
+        ProcessorInterface|string $processor,
+        int $priority = 1,
+        ?array $options = null
+    ): static {
         if (is_string($processor)) {
             $processor = $this->processorPlugin($processor, $options);
         } elseif (! $processor instanceof Processor\ProcessorInterface) {
             throw new InvalidArgumentException(sprintf(
                 'Processor must implement Laminas\Log\ProcessorInterface; received "%s"',
-                is_object($processor) ? get_class($processor) : gettype($processor)
+                $processor::class
             ));
         }
         $this->processors->insert($processor, $priority);
@@ -299,7 +329,7 @@ class Logger implements LoggerInterface
 
     public function log(int $priority, mixed $message, iterable $extra = []): static
     {
-        if (! is_int($priority) || ($priority < 0) || ($priority >= count($this->priorities))) {
+        if (($priority < 0) || ($priority >= count($this->priorities))) {
             throw new InvalidArgumentException(sprintf(
                 '$priority must be an integer >= 0 and < %d; received %s',
                 count($this->priorities),
@@ -514,9 +544,6 @@ class Logger implements LoggerInterface
                     'line'  => $exception->getLine(),
                     'trace' => $exception->getTrace(),
                 ];
-                if (isset($exception->xdebug_message)) {
-                    $extra['xdebug'] = $exception->xdebug_message;
-                }
 
                 $logMessages[] = [
                     'priority' => $priority,
@@ -541,4 +568,3 @@ class Logger implements LoggerInterface
         static::$registeredExceptionHandler = false;
     }
 }
-

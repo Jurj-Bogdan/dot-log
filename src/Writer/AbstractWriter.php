@@ -17,11 +17,21 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\ErrorHandler;
 use Traversable;
 
+use function gettype;
+use function is_array;
+use function is_int;
+use function is_object;
+use function is_string;
+use function iterator_to_array;
+use function sprintf;
+
+use const E_WARNING;
+
 abstract class AbstractWriter implements WriterInterface
 {
-    protected FilterPluginManager $filterPlugins;
+    protected ?FilterPluginManager $filterPlugins;
 
-    protected FormatterPluginManager $formatterPlugins;
+    protected ?FormatterPluginManager $formatterPlugins;
 
     protected array $filters = [];
 
@@ -44,7 +54,7 @@ abstract class AbstractWriter implements WriterInterface
      * - filters: array of filters to add to this filter
      * - formatter: formatter for this writer
      */
-    public function __construct(iterable $options = null)
+    public function __construct(?iterable $options = null)
     {
         if ($options instanceof Traversable) {
             $options = iterator_to_array($options);
@@ -112,7 +122,7 @@ abstract class AbstractWriter implements WriterInterface
             throw new InvalidArgumentException(sprintf(
                 'Filter must implement %s\Filter\FilterInterface; received "%s"',
                 __NAMESPACE__,
-                is_object($filter) ? get_class($filter) : gettype($filter)
+                is_object($filter) ? $filter::class : gettype($filter)
             ));
         }
 
@@ -120,7 +130,7 @@ abstract class AbstractWriter implements WriterInterface
         return $this;
     }
 
-    public function getFilterPluginManager(): FilterPluginManager
+    public function getFilterPluginManager(): ?FilterPluginManager
     {
         if (null === $this->filterPlugins) {
             $this->setFilterPluginManager(new FilterPluginManager(new ServiceManager()));
@@ -128,7 +138,7 @@ abstract class AbstractWriter implements WriterInterface
         return $this->filterPlugins;
     }
 
-    public function setFilterPluginManager($plugins): static
+    public function setFilterPluginManager(string|FilterPluginManager $plugins): static
     {
         if (is_string($plugins)) {
             $plugins = new $plugins();
@@ -137,7 +147,7 @@ abstract class AbstractWriter implements WriterInterface
             throw new InvalidArgumentException(sprintf(
                 'Writer plugin manager must extend %s; received %s',
                 FilterPluginManager::class,
-                is_object($plugins) ? get_class($plugins) : gettype($plugins)
+                $plugins::class
             ));
         }
 
@@ -145,12 +155,12 @@ abstract class AbstractWriter implements WriterInterface
         return $this;
     }
 
-    public function filterPlugin($name, ?array $options = null)
+    public function filterPlugin(string $name, ?array $options = null): mixed
     {
         return $this->getFilterPluginManager()->get($name, $options);
     }
 
-    public function getFormatterPluginManager(): FormatterPluginManager
+    public function getFormatterPluginManager(): ?FormatterPluginManager
     {
         if (null === $this->formatterPlugins) {
             $this->setFormatterPluginManager(new FormatterPluginManager(new ServiceManager()));
@@ -158,7 +168,7 @@ abstract class AbstractWriter implements WriterInterface
         return $this->formatterPlugins;
     }
 
-    public function setFormatterPluginManager($plugins): static
+    public function setFormatterPluginManager(string|FormatterPluginManager $plugins): static
     {
         if (is_string($plugins)) {
             $plugins = new $plugins();
@@ -168,7 +178,7 @@ abstract class AbstractWriter implements WriterInterface
                 sprintf(
                     'Writer plugin manager must extend %s; received %s',
                     FormatterPluginManager::class,
-                    is_object($plugins) ? get_class($plugins) : gettype($plugins)
+                    $plugins::class
                 )
             );
         }
@@ -177,13 +187,14 @@ abstract class AbstractWriter implements WriterInterface
         return $this;
     }
 
-    public function formatterPlugin($name, ?array $options = null)
+    public function formatterPlugin(string $name, ?array $options = null): mixed
     {
         return $this->getFormatterPluginManager()->get($name, $options);
     }
 
     /**
      * Log a message to this writer.
+     *
      * @throws ErrorException
      */
     public function write(array $event): void
@@ -228,7 +239,7 @@ abstract class AbstractWriter implements WriterInterface
             throw new InvalidArgumentException(sprintf(
                 'Formatter must implement %s\Formatter\FormatterInterface; received "%s"',
                 __NAMESPACE__,
-                is_object($formatter) ? get_class($formatter) : gettype($formatter)
+                is_object($formatter) ? $formatter::class : gettype($formatter)
             ));
         }
 
@@ -263,4 +274,3 @@ abstract class AbstractWriter implements WriterInterface
      */
     abstract protected function doWrite(array $event): void;
 }
-

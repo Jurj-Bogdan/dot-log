@@ -15,10 +15,11 @@ interface FormatterInterface
 
     /**
      * Formats data into a single line to be written by the writer.
+     *
      * @return string|array Either a formatted line to write to the log, or the
      *     updated event information to provide to the writer.
      */
-    public function format($event): array|string;
+    public function format(iterable $event): iterable|string;
 
     /**
      * Get the format specifier for DateTime objects
@@ -30,5 +31,5 @@ interface FormatterInterface
      *
      * @see http://php.net/manual/en/function.date.php
      */
-    public function setDateTimeFormat($dateTimeFormat);
+    public function setDateTimeFormat(string $dateTimeFormat);
 }

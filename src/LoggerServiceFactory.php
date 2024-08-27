@@ -8,10 +8,24 @@ use ArrayAccess;
 use Dot\Log\Exception\InvalidArgumentException;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+
+use function gettype;
+use function is_array;
+use function is_iterable;
+use function is_object;
+use function is_string;
+use function iterator_to_array;
 
 class LoggerServiceFactory implements FactoryInterface
 {
+    /**
+     * @param string $requestedName
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Logger
     {
         // Configure the logger
@@ -70,7 +84,7 @@ class LoggerServiceFactory implements FactoryInterface
 
         foreach ($config['writers'] as $writerConfig) {
             if (! is_array($writerConfig) && ! $writerConfig instanceof ArrayAccess) {
-                $type = is_object($writerConfig) ? get_class($writerConfig) : gettype($writerConfig);
+                $type = is_object($writerConfig) ? $writerConfig::class : gettype($writerConfig);
                 throw new InvalidArgumentException(
                     'config log.writers[] must contain array or ArrayAccess, ' . $type . ' provided'
                 );

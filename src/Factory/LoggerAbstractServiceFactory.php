@@ -33,6 +33,7 @@ class LoggerAbstractServiceFactory extends LoggerServiceFactory implements Abstr
     }
 
     /**
+     * @param string $requestedName
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
@@ -54,6 +55,11 @@ class LoggerAbstractServiceFactory extends LoggerServiceFactory implements Abstr
         return isset($config[$parts[1]]);
     }
 
+    /**
+     * @param string $requestedName
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Logger
     {
         $parts = explode('.', $requestedName);

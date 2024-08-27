@@ -7,6 +7,15 @@ namespace Dot\Log\Formatter;
 use Dot\Log\Exception\InvalidArgumentException;
 use Traversable;
 
+use function array_key_exists;
+use function count;
+use function is_array;
+use function is_string;
+use function iterator_to_array;
+use function rtrim;
+use function str_replace;
+use function strpos;
+
 class Simple extends Base
 {
     public const DEFAULT_FORMAT = '%timestamp% %priorityName% (%priority%): %message% %extra%';
@@ -16,7 +25,7 @@ class Simple extends Base
      */
     protected string $format;
 
-    public function __construct($format = null, $dateTimeFormat = null)
+    public function __construct(iterable|string|null $format = null, string|iterable|null $dateTimeFormat = null)
     {
         if ($format instanceof Traversable) {
             $format = iterator_to_array($format);
@@ -39,7 +48,7 @@ class Simple extends Base
     /**
      * Formats data into a single line to be written by the writer.
      */
-    public function format($event): array|string
+    public function format(iterable $event): array|string
     {
         $output = $this->format;
 

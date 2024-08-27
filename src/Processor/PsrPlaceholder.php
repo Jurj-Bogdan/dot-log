@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace Dot\Log\Processor;
 
+use function gettype;
+use function is_object;
+use function is_scalar;
+use function method_exists;
+use function strpos;
+use function strtr;
+
 class PsrPlaceholder implements ProcessorInterface
 {
     public function process(array $event): array
@@ -24,7 +31,7 @@ class PsrPlaceholder implements ProcessorInterface
             }
 
             if (is_object($val)) {
-                $replacements['{' . $key . '}'] = '[object ' . get_class($val) . ']';
+                $replacements['{' . $key . '}'] = '[object ' . $val::class . ']';
                 continue;
             }
 
@@ -35,4 +42,3 @@ class PsrPlaceholder implements ProcessorInterface
         return $event;
     }
 }
-

@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace Dot\Log\Processor;
 
+use function array_merge;
+use function array_shift;
+use function debug_backtrace;
+use function strpos;
+
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
+
 class Backtrace implements ProcessorInterface
 {
     /**
@@ -77,7 +84,7 @@ class Backtrace implements ProcessorInterface
     /**
      * Determine whether the current frame in the backtrace should be ignored based on the class name
      */
-    protected function shouldIgnoreFrame($class): bool
+    protected function shouldIgnoreFrame(string $class): bool
     {
         foreach ($this->ignoredNamespaces as $ignoredNamespace) {
             if (false !== strpos($class, $ignoredNamespace)) {
@@ -88,4 +95,3 @@ class Backtrace implements ProcessorInterface
         return false;
     }
 }
-

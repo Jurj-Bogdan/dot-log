@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace DotTest\Log;
 
 use Dot\Log\ConfigProvider;
-use Laminas\Log\FilterPluginManager;
-use Laminas\Log\FormatterPluginManager;
-use Laminas\Log\Logger;
-use Laminas\Log\ProcessorPluginManager;
-use Laminas\Log\WriterPluginManager;
+use Dot\Log\Logger;
+use Dot\Log\Manager\FilterPluginManager;
+use Dot\Log\Manager\FormatterPluginManager;
+use Dot\Log\Manager\ProcessorPluginManager;
+use Dot\Log\Manager\WriterPluginManager;
 use PHPUnit\Framework\TestCase;
 
 class ConfigProviderTest extends TestCase

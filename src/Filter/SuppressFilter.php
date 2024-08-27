@@ -7,6 +7,12 @@ namespace Dot\Log\Filter;
 use Dot\Log\Exception\InvalidArgumentException;
 use Traversable;
 
+use function gettype;
+use function is_array;
+use function is_bool;
+use function iterator_to_array;
+use function sprintf;
+
 class SuppressFilter implements FilterInterface
 {
     protected bool $accept = true;
@@ -14,7 +20,7 @@ class SuppressFilter implements FilterInterface
     /**
      * This is a simple boolean filter.
      */
-    public function __construct($suppress = false)
+    public function __construct(bool|iterable $suppress = false)
     {
         if ($suppress instanceof Traversable) {
             $suppress = iterator_to_array($suppress);
@@ -39,7 +45,7 @@ class SuppressFilter implements FilterInterface
      */
     public function suppress(bool $suppress): void
     {
-        $this->accept = !$suppress;
+        $this->accept = ! $suppress;
     }
 
     /**

@@ -9,6 +9,12 @@ use ErrorException;
 use Laminas\Stdlib\ErrorHandler;
 use Traversable;
 
+use function is_array;
+use function iterator_to_array;
+use function preg_match;
+use function sprintf;
+use function var_export;
+
 class Regex implements FilterInterface
 {
     /**
@@ -18,17 +24,16 @@ class Regex implements FilterInterface
 
     /**
      * Filter out any log messages not matching the pattern
+     *
      * @throws ErrorException
      */
-    public function __construct($regex)
+    public function __construct(iterable $regex)
     {
         if ($regex instanceof Traversable) {
             $regex = iterator_to_array($regex);
         }
-        if (is_array($regex)) {
-            $regex = $regex['regex'] ?? null;
-        }
-        ErrorHandler::start(E_WARNING);
+        $regex = $regex['regex'] ?? null;
+        ErrorHandler::start();
         $result = preg_match($regex, '');
         $error  = ErrorHandler::stop();
         if ($result === false) {

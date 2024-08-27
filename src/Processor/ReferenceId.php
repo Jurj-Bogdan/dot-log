@@ -26,7 +26,7 @@ class ReferenceId extends RequestId implements ProcessorInterface
         return $event;
     }
 
-    public function setReferenceId($identifier): static
+    public function setReferenceId(string $identifier): static
     {
         $this->identifier = $identifier;
 
@@ -38,4 +38,3 @@ class ReferenceId extends RequestId implements ProcessorInterface
         return $this->getIdentifier();
     }
 }
-

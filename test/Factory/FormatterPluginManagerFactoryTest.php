@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DotTest\Log\Factory;
 
 use Dot\Log\Factory\FormatterPluginManagerFactory;
-use Laminas\Log\FormatterPluginManager;
+use Dot\Log\Manager\FormatterPluginManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

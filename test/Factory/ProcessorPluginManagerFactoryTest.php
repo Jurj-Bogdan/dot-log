@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DotTest\Log\Factory;
 
 use Dot\Log\Factory\ProcessorPluginManagerFactory;
-use Laminas\Log\ProcessorPluginManager;
+use Dot\Log\Manager\ProcessorPluginManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

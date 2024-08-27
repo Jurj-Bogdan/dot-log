@@ -8,7 +8,6 @@ use DateTime;
 use Traversable;
 
 use function defined;
-use function get_class;
 use function get_resource_type;
 use function gettype;
 use function is_array;
@@ -35,7 +34,7 @@ class Base implements FormatterInterface
     /**
      * @see http://php.net/manual/en/function.date.php
      */
-    public function __construct(string|iterable $dateTimeFormat = null)
+    public function __construct(string|iterable|null $dateTimeFormat = null)
     {
         if ($dateTimeFormat instanceof Traversable) {
             $dateTimeFormat = iterator_to_array($dateTimeFormat);
@@ -52,8 +51,11 @@ class Base implements FormatterInterface
 
     /**
      * Formats data to be written by the writer.
+     *
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
-    public function format($event): array|string
+    public function format(iterable $event): iterable|string
     {
         foreach ($event as $key => $value) {
             // Keep extra as an array
@@ -96,7 +98,7 @@ class Base implements FormatterInterface
         } elseif (is_array($value)) {
             $value = @json_encode($value, $jsonFlags);
         } elseif (is_object($value) && ! method_exists($value, '__toString')) {
-            $value = sprintf('object(%s) %s', get_class($value), @json_encode($value));
+            $value = sprintf('object(%s) %s', $value::class, @json_encode($value));
         } elseif (is_resource($value)) {
             $value = sprintf('resource(%s)', get_resource_type($value));
         } elseif (! is_object($value)) {

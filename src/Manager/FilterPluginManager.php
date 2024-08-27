@@ -13,13 +13,17 @@ use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
-use function get_class;
 use function gettype;
 use function is_object;
 use function sprintf;
 
+/**
+ * @template F of FilterPluginManager
+ * @extends AbstractPluginManager<F>
+ */
 class FilterPluginManager extends AbstractPluginManager
 {
+    /** @var string[] */
     protected $aliases = [
         'priority'       => Priority::class,
         'regex'          => Regex::class,
@@ -28,6 +32,7 @@ class FilterPluginManager extends AbstractPluginManager
         'validator'      => Validator::class,
     ];
 
+    /** @var string[]|callable[] */
     protected $factories = [
         Priority::class       => InvokableFactory::class,
         Regex::class          => InvokableFactory::class,
@@ -35,10 +40,13 @@ class FilterPluginManager extends AbstractPluginManager
         Validator::class      => InvokableFactory::class,
     ];
 
+    /** @var ?string */
     protected $instanceOf = FilterInterface::class;
 
     /**
      * Allow many filters of the same type
+     *
+     * @var bool
      */
     protected $sharedByDefault = false;
 
@@ -47,14 +55,14 @@ class FilterPluginManager extends AbstractPluginManager
      *
      * Validates against `$instanceOf`.
      */
-    public function validate($instance): void
+    public function validate(mixed $instance): void
     {
         if (! $instance instanceof $this->instanceOf) {
             throw new InvalidServiceException(sprintf(
                 '%s can only create instances of %s; %s is invalid',
                 static::class,
                 $this->instanceOf,
-                is_object($instance) ? get_class($instance) : gettype($instance)
+                is_object($instance) ? $instance::class : gettype($instance)
             ));
         }
     }

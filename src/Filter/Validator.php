@@ -8,6 +8,12 @@ use Dot\Log\Exception\InvalidArgumentException;
 use Laminas\Validator\ValidatorInterface as LaminasValidator;
 use Traversable;
 
+use function gettype;
+use function is_array;
+use function is_object;
+use function iterator_to_array;
+use function sprintf;
+
 class Validator implements FilterInterface
 {
     /**
@@ -18,7 +24,7 @@ class Validator implements FilterInterface
     /**
      * Filter out any log messages not matching the validator
      */
-    public function __construct($validator)
+    public function __construct(iterable|LaminasValidator $validator)
     {
         if ($validator instanceof Traversable && ! $validator instanceof LaminasValidator) {
             $validator = iterator_to_array($validator);
@@ -29,7 +35,7 @@ class Validator implements FilterInterface
         if (! $validator instanceof LaminasValidator) {
             throw new InvalidArgumentException(sprintf(
                 'Parameter of type %s is invalid; must implement Laminas\Validator\ValidatorInterface',
-                is_object($validator) ? get_class($validator) : gettype($validator)
+                is_object($validator) ? $validator::class : gettype($validator)
             ));
         }
         $this->validator = $validator;
@@ -38,7 +44,7 @@ class Validator implements FilterInterface
     /**
      * Returns TRUE to accept the message, FALSE to block it.
      */
-    public function filter(array $event)
+    public function filter(array $event): bool
     {
         return $this->validator->isValid($event['message']);
     }

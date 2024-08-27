@@ -10,20 +10,33 @@ use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
 
+use function gettype;
+use function is_object;
+use function sprintf;
+
+/**
+ * @template F of FormatterPluginManager
+ * @extends AbstractPluginManager<F>
+ */
 class FormatterPluginManager extends AbstractPluginManager
 {
+    /** @var string[]  */
     protected $aliases = [
-        'simple'           => Simple::class,
+        'simple' => Simple::class,
     ];
 
+    /** @var string[]|callable[] */
     protected $factories = [
-        Simple::class           => InvokableFactory::class,
+        Simple::class => InvokableFactory::class,
     ];
 
+    /** @var ?string */
     protected $instanceOf = FormatterInterface::class;
 
     /**
      * Allow many formatters of the same type
+     *
+     * @var bool
      */
     protected $sharedByDefault = false;
 
@@ -32,14 +45,14 @@ class FormatterPluginManager extends AbstractPluginManager
      *
      * Validates against `$instanceOf`.
      */
-    public function validate($instance): void
+    public function validate(mixed $instance): void
     {
         if (! $instance instanceof $this->instanceOf) {
             throw new InvalidServiceException(sprintf(
                 '%s can only create instances of %s; %s is invalid',
                 static::class,
                 $this->instanceOf,
-                is_object($instance) ? get_class($instance) : gettype($instance)
+                is_object($instance) ? $instance::class : gettype($instance)
             ));
         }
     }

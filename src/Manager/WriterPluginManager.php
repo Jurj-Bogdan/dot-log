@@ -11,11 +11,20 @@ use Dot\Log\Writer\WriterInterface;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 
+use function gettype;
+use function is_object;
+use function sprintf;
+
+/**
+ * @template W of WriterPluginManager
+ * @extends AbstractPluginManager<W>
+ */
 class WriterPluginManager extends AbstractPluginManager
 {
+    /** @var string[] */
     protected $aliases = [
-        'noop'           => Noop::class,
-        'stream'         => Stream::class,
+        'noop'   => Noop::class,
+        'stream' => Stream::class,
 
         // The following are for backwards compatibility only; users
         // should update their code to use the noop writer instead.
@@ -23,15 +32,19 @@ class WriterPluginManager extends AbstractPluginManager
         'laminaslogwriternull' => Noop::class,
     ];
 
+    /** @var string[]|callable[] */
     protected $factories = [
-        Noop::class           => WriterFactory::class,
-        Stream::class         => WriterFactory::class,
+        Noop::class   => WriterFactory::class,
+        Stream::class => WriterFactory::class,
     ];
 
+    /** @var ?string */
     protected $instanceOf = WriterInterface::class;
 
     /**
      * Allow many writers of the same type
+     *
+     * @var bool
      */
     protected $sharedByDefault = false;
 
@@ -47,9 +60,8 @@ class WriterPluginManager extends AbstractPluginManager
                 '%s can only create instances of %s; %s is invalid',
                 static::class,
                 $this->instanceOf,
-                is_object($instance) ? get_class($instance) : gettype($instance)
+                is_object($instance) ? $instance::class : gettype($instance)
             ));
         }
     }
 }
-
