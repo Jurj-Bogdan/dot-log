@@ -31,7 +31,7 @@ return [
                 'writers' => [
                     'FileWriter' => [
                         'name' => 'FileWriter',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/dk.log',
                             'filters' => [
@@ -39,7 +39,7 @@ return [
                                     'name' => 'priority',
                                     'options' => [
                                         'operator' => '>=', 
-                                        'priority' => \Laminas\Log\Logger::EMERG,
+                                        'priority' => \Dot\Log\Manager\Logger::EMERG,
                                     ]
                                 ],
                             ],
@@ -48,7 +48,7 @@ return [
                     // Only warnings
                     'OnlyWarningsWriter' => [
                         'name' => 'stream',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/warnings_only.log',
                             'filters' => [
@@ -56,7 +56,7 @@ return [
                                     'name' => 'priority',
                                     'options' => [
                                         'operator' => '==',
-                                        'priority' => \Laminas\Log\Logger::WARN,
+                                        'priority' => \Dot\Log\Manager\Logger::WARN,
                                     ],
                                 ],
                             ],
@@ -65,7 +65,7 @@ return [
                     // Warnings and more important messages
                     'WarningOrHigherWriter' => [
                         'name' => 'stream',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/important_messages.log',
                             'filters' => [
@@ -75,7 +75,7 @@ return [
                                         // note, the smaller the priority, the more important is the message
                                         // 0 - emergency, 1 - alert, 2- error, 3 - warn etc.
                                         'operator' => '<=',
-                                        'priority' => \Laminas\Log\Logger::WARN,
+                                        'priority' => \Dot\Log\Manager\Logger::WARN,
                                     ],
                                 ],
                             ],

@@ -2,11 +2,21 @@ docs_dir: docs/book
 site_dir: docs/html
 extra:
   project: Packages
-  current_version: v3
+  current_version: v4
   versions:
+    - v4
     - v3
 nav:
   - Home: index.md
+  - v4:
+      - "Overview": v4/overview.md
+      - "Adding The Config Provider": v4/adding-config-provider.md
+      - "Configuring the writer(s)": v4/configuring-writer.md
+      - "Grouping log files by date": v4/grouping-log-files-by-date.md
+      - "Filtering log messages": v4/filtering-log-messages.md
+      - "Formatting Messages": v4/formatting-messages.md
+      - "Example with formatter": v4/example-with-formatter.md
+      - "Usage": v4/usage.md
   - v3:
       - "Overview": v3/overview.md
       - "Adding The Config Provider": v3/adding-config-provider.md
@@ -17,7 +27,7 @@ nav:
       - "Example with formatter": v3/example-with-formatter.md
       - "Usage": v3/usage.md
 site_name: dot-log
-site_description: "DotKernel log component extending and customizing laminas-log"
+site_description: "DotKernel log component"
 repo_url: "https://github.com/dotkernel/dot-log"
 plugins:
   - search

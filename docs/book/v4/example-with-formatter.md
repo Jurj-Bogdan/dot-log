@@ -15,7 +15,7 @@ return [
                 'writers' => [
                     'FileWriter' => [
                         'name' => 'FileWriter',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/dk.log',
                             // explicitly log all messages
@@ -24,12 +24,12 @@ return [
                                     'name' => 'priority',
                                     'options' => [
                                         'operator' => '>=',
-                                        'priority' => \Laminas\Log\Logger::EMERG,
+                                        'priority' => \Dot\Log\Manager\Logger::EMERG,
                                     ],
                                 ],
                             ],
                             'formatter' => [
-                                'name' => \Laminas\Log\Formatter\Json::class,
+                                'name' => \Dot\Log\Manager\Formatter\Json::class,
                             ],
                         ],
                     ],
