@@ -13,7 +13,7 @@ The log levels are in order of priority/importance:
 * info (6)
 * debug (7)
 
-Although the plain Logger in `laminas-log` is not fully compatible with PSR-3, it provides a way to log all of these message types.
+Although the plain Logger in `dot-log` is not fully compatible with PSR-3, it provides a way to log all of these message types.
 
 The following example has three file writers using filters:
 
@@ -93,5 +93,3 @@ As in the writer configuration, the developer can optionally use keys for associ
 IMPORTANT NOTE: the operator for more important messages is `<=`, this is because the number representation is smaller for a more important message type.
 
 The filter added on the first writer is equivalent to not setting a filter, but it was added to illustrate the usage of the operator to explicitly allow all messages.
-
-More examples on filters: https://docs.laminas.dev/laminas-log/filters/
