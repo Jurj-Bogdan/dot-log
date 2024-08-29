@@ -7,7 +7,7 @@ return [
             'stream_logger' => [
                 'writers' => [
                     'name' => 'stream',
-                    'priority' => \Laminas\Log\Logger::DEBUG,
+                    'priority' => \Dot\Log\Logger::DEBUG,
                     'options' => [
                         'stream' => 'php://output',
                         'formatter' => [
