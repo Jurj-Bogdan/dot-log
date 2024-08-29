@@ -1,7 +1,5 @@
 # dot-log
 
-## dot-log badges
-
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-log)
 ![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-log/4.0.0)
 
