@@ -1,14 +1,9 @@
 # dot-log
 
-> [!IMPORTANT]
-> dot-log is a wrapper on top of [laminas/laminas-log](https://github.com/laminas/laminas-log)
->
-> ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Flaminas%2Flaminas-log%2Fproperties%2Fvalues&query=%24%5B%3F(%40.property_name%3D%3D%22maintenance-mode%22)%5D.value&label=Maintenance%20Mode)
-
 ## dot-log badges
 
 ![OSS Lifecycle](https://img.shields.io/osslifecycle/dotkernel/dot-log)
-![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-log/3.4.4)
+![PHP from Packagist (specify version)](https://img.shields.io/packagist/php-v/dotkernel/dot-log/4.0.0)
 
 [![GitHub issues](https://img.shields.io/github/issues/dotkernel/dot-log)](https://github.com/dotkernel/dot-log/issues)
 [![GitHub forks](https://img.shields.io/github/forks/dotkernel/dot-log)](https://github.com/dotkernel/dot-log/network)
@@ -29,13 +24,13 @@
 * Open the `Dot\Log\ConfigProvider`
 * In the dependencies section you will see an abstract factory (`LoggerAbstractServiceFactory::class`)
 * This class responds to "selectors" instead of class names
-  Instead of requesting the `Laminas\Log\Logger::class` from the container, `dot-log.my_logger` should be requested (or just `my_logger` if using `laminas-log`)
+  Instead of requesting the `Dot\Log\Logger::class` from the container, `dot-log.my_logger` should be requested
 
 ## Configuring the writer(s)
 
 Loggers must have at least one writer.
 
-A writer is an object that inherits from `Laminas\Log\Writer\AbstractWriter`. A writer's responsibility is to record log data to a storage backend. (from laminas-log's writer documentation)
+A writer is an object that inherits from `Dot\Log\Writer\AbstractWriter`. A writer's responsibility is to record log data to a storage backend.
 
 ### Writing to a file (stream)
 
@@ -52,7 +47,7 @@ return [
                 'writers' => [
                      'FileWriter' => [
                         'name' => 'FileWriter',
-                        'priority' => \Laminas\Log\Logger::ALERT, // this is equal to 1
+                        'priority' => \Dot\Log\Manager\Logger::ALERT, // this is equal to 1
                         'options' => [
                             'stream' => __DIR__ . '/../../log/dk.log',
                         ],
@@ -67,12 +62,7 @@ return [
 * The `FileWriter` key is optional, otherwise the writers array would be enumerative instead of associative.
 * The writer name key is a developer-provided name for that writer, the writer name key is **mandatory**.
 
-The writer priority key is not affecting the errors that are written, it is a way to organize writers, for example:
-
-1 - FILE
-2 - SQL
-3 - E-mail
-It is the most important to write in the file, the sql or e-mail are more probably fail because the servers can be external and offline, the file is on the same server.
+The writer priority key is not affecting the errors that are written, it is a way to organize writers.
 
 The writer priority key is optional.
 
@@ -95,7 +85,7 @@ As per PSR-3 document.
 
 The log levels are: emergency (0), alert (1), critical (2), error (3), warn (4), notice (5), info (6), debug (7) (in order of priority/importance)
 
-Although the plain Logger in Laminas Log is not fully compatible with PSR-3, it provides a way to log all of these message types.
+Although the plain Logger in Dot Log is not fully compatible with PSR-3, it provides a way to log all of these message types.
 
 The following example has three file writers using filters:
 
@@ -113,7 +103,7 @@ return [
                 'writers' => [
                     'FileWriter' => [
                         'name' => 'FileWriter',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/dk.log',
                             'filters' => [
@@ -121,7 +111,7 @@ return [
                                     'name' => 'priority',
                                     'options' => [
                                         'operator' => '>=', 
-                                        'priority' => \Laminas\Log\Logger::EMERG,
+                                        'priority' => \Dot\Log\Manager\Logger::EMERG,
                                     ]
                                 ],
                             ],
@@ -130,7 +120,7 @@ return [
                     // Only warnings
                     'OnlyWarningsWriter' => [
                         'name' => 'stream',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/warnings_only.log',
                             'filters' => [
@@ -138,7 +128,7 @@ return [
                                     'name' => 'priority',
                                     'options' => [
                                         'operator' => '==',
-                                        'priority' => \Laminas\Log\Logger::WARN,
+                                        'priority' => \Dot\Log\Manager\Logger::WARN,
                                     ],
                                 ],
                             ],
@@ -147,7 +137,7 @@ return [
                     // Warnings and more important messages
                     'WarningOrHigherWriter' => [
                         'name' => 'stream',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/important_messages.log',
                             'filters' => [
@@ -157,7 +147,7 @@ return [
                                         // note, the smaller the priority, the more important is the message
                                         // 0 - emergency, 1 - alert, 2- error, 3 - warn. .etc
                                         'operator' => '<=',
-                                        'priority' => \Laminas\Log\Logger::WARN,
+                                        'priority' => \Dot\Log\Manager\Logger::WARN,
                                     ],
                                 ],
                             ],
@@ -178,26 +168,24 @@ The filter added on the first writer is equal to not setting a filter, but it wa
 
 It was added opposite to the others just to demonstrate the other operator is also an option.
 
-More examples on filters: https://docs.laminas.dev/laminas-log/filters/
-
 ## Formatting Messages
 
-When using `dot-log` or `laminas-log`, the logged value is not limited to a string. Arrays can be logged as well.
+When using `dot-log`, the logged value is not limited to a string. Arrays can be logged as well.
 
 For a better readability, these arrays can be serialized.
 
-Laminas Log provides String formatting, XML, JSON and FirePHP formatting.
+Dot Log provides String formatting and JSON formatting.
 
 The formatter accepts following parameters:
 
-name - the formatter class (it must implement `Laminas\Log\Formatter\FormatterInterface`)
+name - the formatter class (it must implement `Dot\Log\Formatter\FormatterInterface`)
 options - options to pass to the formatter constructor if required
 
 The following formats the message as JSON data:
 
 ```php
 'formatter' => [
-    'name' => \Laminas\Log\Formatter\Json::class,
+    'name' => \Dot\Log\Manager\Formatter\Json::class,
 ],
 ```
 
@@ -220,7 +208,7 @@ return [
                 'writers' => [
                     'FileWriter' => [
                         'name' => 'FileWriter',
-                        'priority' => \Laminas\Log\Logger::ALERT,
+                        'priority' => \Dot\Log\Manager\Logger::ALERT,
                         'options' => [
                             'stream' => __DIR__ . '/../../log/dk.log',
                             // explicitly log all messages
@@ -229,12 +217,12 @@ return [
                                     'name' => 'priority',
                                     'options' => [
                                         'operator' => '>=',
-                                        'priority' => \Laminas\Log\Logger::EMERG,
+                                        'priority' => \Dot\Log\Manager\Logger::EMERG,
                                     ],
                                 ],
                             ],
                             'formatter' => [
-                                'name' => \Laminas\Log\Formatter\Json::class,
+                                'name' => \Dot\Log\Manager\Formatter\Json::class,
                             ],
                         ],
                     ],
@@ -252,7 +240,7 @@ Basic usage of the logger is illustrated below.
 The messages are written to see which logs are written and which are not written.
 
 ```php
-use Laminas\Log\Logger;
+use Dot\Log\Manager\Logger;
 ```
 
 ...
@@ -271,11 +259,5 @@ $logger->info('6 INF');
 $logger->debug('7 debug');
 $logger->log(Logger::NOTICE, 'NOTICE from log()');
 ```
-
-Sources:
-
-* https://docs.laminas.dev/laminas-log/
-* https://docs.laminas.dev/laminas-log/writers/
-* https://docs.laminas.dev/laminas-log/filters/
 
 Extracted from [this article](https://www.dotkernel.com/dotkernel/logging-with-dot-log-in-mezzio-and-dotkernel)

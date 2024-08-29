@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Dot\Log\Factory;
 
-use Dot\Mail\Service\MailServiceInterface;
-use Laminas\Log\Logger;
-use Laminas\Log\Writer\Mail;
+use Dot\Log\Logger;
+use Dot\Log\LoggerServiceFactory;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -14,21 +14,22 @@ use Psr\Container\NotFoundExceptionInterface;
 use function count;
 use function date;
 use function explode;
-use function in_array;
 use function is_array;
-use function is_string;
 use function preg_match_all;
 use function str_replace;
 
-class LoggerAbstractServiceFactory extends \Laminas\Log\LoggerAbstractServiceFactory
+class LoggerAbstractServiceFactory extends LoggerServiceFactory implements AbstractFactoryInterface
 {
+    protected array $config;
+
+    protected string $configKey;
     protected const PREFIX = 'dot-log';
 
     protected string $subConfigKey = 'loggers';
 
     public function __construct(string $configKey = 'dot_log')
     {
-        parent::__construct($configKey);
+        $this->configKey = $configKey;
     }
 
     /**
@@ -46,22 +47,45 @@ class LoggerAbstractServiceFactory extends \Laminas\Log\LoggerAbstractServiceFac
             return false;
         }
 
-        return parent::canCreate($container, $parts[1]);
+        $config = $this->getConfig($container);
+        if (empty($config)) {
+            return false;
+        }
+
+        return isset($config[$parts[1]]);
     }
 
     /**
      * @param string $requestedName
      * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Logger
     {
         $parts = explode('.', $requestedName);
-        return parent::__invoke($container, $parts[1], $options);
+
+        $config = $this->getConfig($container);
+        $config = $config[$parts[1]];
+
+        $this->processConfig($config, $container);
+
+        return new Logger($config);
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function getConfig(ContainerInterface $services): array
     {
-        parent::getConfig($services);
+        if (! $services->has('config')) {
+            $this->config = [];
+        }
+
+        $config = $services->get('config');
+        if (isset($config[$this->configKey])) {
+            $this->config = $config[$this->configKey];
+        }
 
         if (
             ! empty($this->config)
@@ -74,10 +98,6 @@ class LoggerAbstractServiceFactory extends \Laminas\Log\LoggerAbstractServiceFac
         return $this->config;
     }
 
-    /**
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     */
     protected function processConfig(array &$config, ContainerInterface $services): void
     {
         if (isset($config['writers'])) {
@@ -86,21 +106,6 @@ class LoggerAbstractServiceFactory extends \Laminas\Log\LoggerAbstractServiceFac
                     $config['writers'][$index]['options']['stream'] = self::parseVariables(
                         $writerConfig['options']['stream']
                     );
-                }
-                if (
-                    isset($writerConfig['name'])
-                    && in_array($writerConfig['name'], ['mail', Mail::class, 'laminaslogwritermail'])
-                    && isset($writerConfig['options']['mail_service'])
-                    && is_string($writerConfig['options']['mail_service'])
-                    && $services->has($writerConfig['options']['mail_service'])
-                ) {
-                    /** @var MailServiceInterface $mailService */
-                    $mailService = $services->get($writerConfig['options']['mail_service']);
-                    $mail        = $mailService->getMessage();
-                    $transport   = $mailService->getTransport();
-
-                    $config['writers'][$index]['options']['mail']      = $mail;
-                    $config['writers'][$index]['options']['transport'] = $transport;
                 }
             }
         }

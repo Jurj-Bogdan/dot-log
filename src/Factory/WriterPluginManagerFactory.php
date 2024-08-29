@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dot\Log\Factory;
 
+use Dot\Log\Manager\WriterPluginManager;
 use Exception;
-use Laminas\Log\WriterPluginManager;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

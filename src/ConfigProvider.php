@@ -9,12 +9,10 @@ use Dot\Log\Factory\FormatterPluginManagerFactory;
 use Dot\Log\Factory\LoggerAbstractServiceFactory;
 use Dot\Log\Factory\ProcessorPluginManagerFactory;
 use Dot\Log\Factory\WriterPluginManagerFactory;
-use Laminas\Log\FilterPluginManager;
-use Laminas\Log\FormatterPluginManager;
-use Laminas\Log\Logger;
-use Laminas\Log\LoggerServiceFactory;
-use Laminas\Log\ProcessorPluginManager;
-use Laminas\Log\WriterPluginManager;
+use Dot\Log\Manager\FilterPluginManager;
+use Dot\Log\Manager\FormatterPluginManager;
+use Dot\Log\Manager\ProcessorPluginManager;
+use Dot\Log\Manager\WriterPluginManager;
 
 class ConfigProvider
 {

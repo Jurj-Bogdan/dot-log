@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DotTest\Log\Factory;
 
 use Dot\Log\Factory\FilterPluginManagerFactory;
-use Laminas\Log\FilterPluginManager;
+use Dot\Log\Manager\FilterPluginManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

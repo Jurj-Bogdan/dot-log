@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DotTest\Log\Factory;
 
 use Dot\Log\Factory\LoggerAbstractServiceFactory;
-use Laminas\Log\Logger;
+use Dot\Log\Logger;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -42,7 +42,7 @@ class LoggerAbstractServiceFactoryTest extends TestCase
     {
         $this->container
             ->method('has')
-            ->will($this->onConsecutiveCalls(true, false));
+            ->willReturn(true, false, false);
 
         $this->container->expects($this->once())
             ->method('get')
