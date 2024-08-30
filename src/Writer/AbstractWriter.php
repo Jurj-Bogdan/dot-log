@@ -29,9 +29,9 @@ use const E_WARNING;
 
 abstract class AbstractWriter implements WriterInterface
 {
-    protected ?FilterPluginManager $filterPlugins;
+    protected ?FilterPluginManager $filterPlugins = null;
 
-    protected ?FormatterPluginManager $formatterPlugins;
+    protected ?FormatterPluginManager $formatterPlugins = null;
 
     protected array $filters = [];
 
