@@ -122,9 +122,9 @@ class Logger implements LoggerInterface
 
     protected SplPriorityQueue $processors;
 
-    protected ?WriterPluginManager $writerPlugins;
+    protected ?WriterPluginManager $writerPlugins = null;
 
-    protected ?ProcessorPluginManager $processorPlugins;
+    protected ?ProcessorPluginManager $processorPlugins = null;
 
     /**
      * Constructor
