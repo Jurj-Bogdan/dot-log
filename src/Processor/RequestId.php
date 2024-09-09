@@ -8,7 +8,7 @@ use function md5;
 
 class RequestId implements ProcessorInterface
 {
-    protected string $identifier;
+    protected ?string $identifier = null;
 
     /**
      * Adds an identifier for the request to the log, unless one has already been set.

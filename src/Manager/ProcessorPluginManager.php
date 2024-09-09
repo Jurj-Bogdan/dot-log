@@ -12,6 +12,7 @@ use Dot\Log\Processor\RequestId;
 use Laminas\ServiceManager\AbstractPluginManager;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Psr\Container\ContainerInterface;
 
 use function gettype;
 use function is_object;
@@ -48,6 +49,11 @@ class ProcessorPluginManager extends AbstractPluginManager
      * @var bool
      */
     protected $sharedByDefault = false;
+
+    public function __construct(ContainerInterface $container, array $config = [])
+    {
+        parent::__construct($container, $config);
+    }
 
     /**
      * Validate the plugin is of the expected type.

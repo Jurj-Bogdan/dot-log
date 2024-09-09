@@ -7,7 +7,6 @@ namespace Dot\Log\Filter;
 use Dot\Log\Exception\InvalidArgumentException;
 use Traversable;
 
-use function ctype_digit;
 use function gettype;
 use function is_array;
 use function is_int;
@@ -34,14 +33,14 @@ class Priority implements FilterInterface
             $operator = $priority['operator'] ?? null;
             $priority = $priority['priority'] ?? null;
         }
-        if (! is_int($priority) && ! ctype_digit($priority)) {
+        if (! is_int($priority)) {
             throw new InvalidArgumentException(sprintf(
                 'Priority must be a number, received "%s"',
                 gettype($priority)
             ));
         }
 
-        $this->priority = (int) $priority;
+        $this->priority = $priority;
         $this->operator = $operator ?? '<=';
     }
 
