@@ -16,18 +16,18 @@ class BackTraceTest extends TestCase
         $this->subject = new Backtrace();
     }
 
-    public function testWillInstantiate()
+    public function testWillInstantiate(): void
     {
         $this->assertInstanceOf(Backtrace::class, $this->subject);
     }
 
-    public function testProcess()
+    public function testProcess(): void
     {
         $result = $this->subject->process([]);
         $this->assertArrayHasKey('extra', $result);
     }
 
-    public function testGetIgnoredNamespaces()
+    public function testGetIgnoredNamespaces(): void
     {
         $result = $this->subject->getIgnoredNamespaces();
         $this->assertIsArray($result);

@@ -24,12 +24,12 @@ interface FormatterInterface
     /**
      * Get the format specifier for DateTime objects
      */
-    public function getDateTimeFormat();
+    public function getDateTimeFormat(): string;
 
     /**
      * Set the format specifier for DateTime objects
      *
      * @see http://php.net/manual/en/function.date.php
      */
-    public function setDateTimeFormat(string $dateTimeFormat);
+    public function setDateTimeFormat(string $dateTimeFormat): static;
 }

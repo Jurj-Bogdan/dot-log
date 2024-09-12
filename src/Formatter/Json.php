@@ -33,7 +33,7 @@ class Json implements FormatterInterface
             $event['timestamp'] = $event['timestamp']->format($this->getDateTimeFormat());
         }
 
-        return @json_encode(
+        return json_encode(
             $event,
             JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION
         );
@@ -50,9 +50,9 @@ class Json implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function setDateTimeFormat($dateTimeFormat): static
+    public function setDateTimeFormat(string $dateTimeFormat): static
     {
-        $this->dateTimeFormat = (string) $dateTimeFormat;
+        $this->dateTimeFormat = $dateTimeFormat;
         return $this;
     }
 }

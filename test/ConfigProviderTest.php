@@ -45,7 +45,7 @@ class ConfigProviderTest extends TestCase
         $this->assertArrayHasKey(WriterPluginManager::class, $this->config['dependencies']['aliases']);
     }
 
-    public function testDependenciesHasAbstractFactories()
+    public function testDependenciesHasAbstractFactories(): void
     {
         $this->assertArrayHasKey('abstract_factories', $this->config['dependencies']);
     }

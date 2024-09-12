@@ -135,8 +135,6 @@ class LoggerTest extends TestCase
             ['regex', ['regex' => '/[0-9]+/']],
         ];
 
-        // Conditionally enabled until laminas-validator is forwards-compatible
-        // with laminas-servicemanager v3.
         if (class_exists(Digits::class)) {
             $data[] = ['validator', ['validator' => new Digits()]];
         }

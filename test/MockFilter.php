@@ -10,10 +10,8 @@ class MockFilter implements FilterInterface
 {
     /**
      * array of log events
-     *
-     * @var array
      */
-    public $events = [];
+    public array $events = [];
 
     /**
      * Returns TRUE to accept the message

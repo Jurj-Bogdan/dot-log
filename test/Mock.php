@@ -10,17 +10,13 @@ class Mock extends AbstractWriter
 {
     /**
      * array of log events
-     *
-     * @var array
      */
-    public $events = [];
+    public array $events = [];
 
     /**
      * shutdown called?
-     *
-     * @var bool
      */
-    public $shutdown = false;
+    public bool $shutdown = false;
 
     /**
      * Write a message to the log.
@@ -32,10 +28,8 @@ class Mock extends AbstractWriter
 
     /**
      * Record shutdown
-     *
-     * @return void
      */
-    public function shutdown()
+    public function shutdown(): void
     {
         $this->shutdown = true;
     }

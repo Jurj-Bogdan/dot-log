@@ -265,7 +265,7 @@ abstract class AbstractWriter implements WriterInterface
     /**
      * Perform shutdown activities such as closing open resources
      */
-    public function shutdown()
+    public function shutdown(): void
     {
     }
 

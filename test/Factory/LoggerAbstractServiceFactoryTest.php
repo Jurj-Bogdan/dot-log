@@ -38,7 +38,7 @@ class LoggerAbstractServiceFactoryTest extends TestCase
     /**
      * @throws ContainerExceptionInterface
      */
-    public function testWillInstantiate()
+    public function testWillInstantiate(): void
     {
         $this->container
             ->method('has')

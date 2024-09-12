@@ -47,7 +47,7 @@ class Priority implements FilterInterface
     /**
      * Returns TRUE to accept the message, FALSE to block it.
      */
-    public function filter(array $event): null|bool|int
+    public function filter(array $event): bool|int|null
     {
         return version_compare((string) $event['priority'], (string) $this->priority, $this->operator);
     }

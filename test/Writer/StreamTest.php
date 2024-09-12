@@ -10,8 +10,8 @@ use Dot\Log\Logger;
 use Dot\Log\Writer\Stream;
 use ErrorException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
-use function curl_init;
 use function fopen;
 
 class StreamTest extends TestCase
@@ -59,7 +59,7 @@ class StreamTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource is not a stream nor a string; received "object"');
-        new Stream(['stream' => curl_init('url')]);
+        new Stream(['stream' => new stdClass()]);
     }
 
     /**

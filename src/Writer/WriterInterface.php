@@ -22,10 +22,10 @@ interface WriterInterface
     /**
      * Write a log message
      */
-    public function write(array $event);
+    public function write(array $event): void;
 
     /**
      * Perform shutdown activities
      */
-    public function shutdown();
+    public function shutdown(): void;
 }
