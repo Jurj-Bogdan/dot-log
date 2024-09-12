@@ -90,7 +90,7 @@ class StreamTest extends TestCase
         $this->assertIsString($this->subject->getLogSeparator());
     }
 
-    public function testShutDown()
+    public function testShutDown(): void
     {
         $this->assertNull($this->subject->shutdown());
     }

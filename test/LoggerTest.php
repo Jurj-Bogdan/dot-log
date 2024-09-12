@@ -23,7 +23,6 @@ use function count;
 use function set_exception_handler;
 
 use const E_USER_NOTICE;
-use const PHP_VERSION_ID;
 
 class LoggerTest extends TestCase
 {
@@ -188,11 +187,7 @@ class LoggerTest extends TestCase
 
         Logger::unregisterErrorHandler();
 
-        if (PHP_VERSION_ID < 80000) {
-            $this->assertEquals('Undefined variable: test', $writer->events[0]['message']);
-        } else {
-            $this->assertEquals('Undefined variable $test', $writer->events[0]['message']);
-        }
+        $this->assertEquals('Undefined variable $test', $writer->events[0]['message']);
     }
 
     public function testOptionsWithMock(): void

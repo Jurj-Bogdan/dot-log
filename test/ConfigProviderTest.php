@@ -36,7 +36,7 @@ class ConfigProviderTest extends TestCase
         $this->assertArrayHasKey('LogWriterManager', $this->config['dependencies']['factories']);
     }
 
-    public function testDependenciesHasAliases()
+    public function testDependenciesHasAliases(): void
     {
         $this->assertArrayHasKey('aliases', $this->config['dependencies']);
         $this->assertArrayHasKey(FilterPluginManager::class, $this->config['dependencies']['aliases']);
