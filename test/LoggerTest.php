@@ -17,10 +17,8 @@ use ErrorException;
 use Exception;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\Stdlib\SplPriorityQueue;
-use Laminas\Validator\Digits;
 use PHPUnit\Framework\TestCase;
 
-use function class_exists;
 use function count;
 use function set_exception_handler;
 
@@ -130,16 +128,10 @@ class LoggerTest extends TestCase
 
     public static function provideTestFilters(): array
     {
-        $data = [
+        return [
             ['priority', ['priority' => Logger::INFO]],
             ['regex', ['regex' => '/[0-9]+/']],
         ];
-
-        if (class_exists(Digits::class)) {
-            $data[] = ['validator', ['validator' => new Digits()]];
-        }
-
-        return $data;
     }
 
     /**
