@@ -94,11 +94,11 @@ class Base implements FormatterInterface
         if ($value instanceof DateTime) {
             $value = $value->format($this->getDateTimeFormat());
         } elseif ($value instanceof Traversable) {
-            $value = @json_encode(iterator_to_array($value), $jsonFlags);
+            $value = json_encode(iterator_to_array($value), $jsonFlags);
         } elseif (is_array($value)) {
-            $value = @json_encode($value, $jsonFlags);
+            $value = json_encode($value, $jsonFlags);
         } elseif (is_object($value) && ! method_exists($value, '__toString')) {
-            $value = sprintf('object(%s) %s', $value::class, @json_encode($value));
+            $value = sprintf('object(%s) %s', $value::class, json_encode($value));
         } elseif (is_resource($value)) {
             $value = sprintf('resource(%s)', get_resource_type($value));
         } elseif (! is_object($value)) {
@@ -111,7 +111,7 @@ class Base implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function getDateTimeFormat()
+    public function getDateTimeFormat(): string
     {
         return $this->dateTimeFormat;
     }
@@ -119,9 +119,9 @@ class Base implements FormatterInterface
     /**
      * {@inheritDoc}
      */
-    public function setDateTimeFormat($dateTimeFormat): static
+    public function setDateTimeFormat(string $dateTimeFormat): static
     {
-        $this->dateTimeFormat = (string) $dateTimeFormat;
+        $this->dateTimeFormat = $dateTimeFormat;
         return $this;
     }
 }

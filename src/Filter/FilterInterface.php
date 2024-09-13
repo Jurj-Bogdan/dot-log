@@ -9,5 +9,5 @@ interface FilterInterface
     /**
      * Returns TRUE to accept the message, FALSE to block it.
      */
-    public function filter(array $event);
+    public function filter(array $event): bool|int|null;
 }

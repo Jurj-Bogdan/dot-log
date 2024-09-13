@@ -68,7 +68,7 @@ class Stream extends AbstractWriter
 
         if (! is_string($streamOrUrl) && ! is_resource($streamOrUrl)) {
             throw new InvalidArgumentException(sprintf(
-                'Resource is not a stream nor a string; received "%s',
+                'Resource is not a stream nor a string; received "%s"',
                 gettype($streamOrUrl)
             ));
         }
